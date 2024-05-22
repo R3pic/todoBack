@@ -1,0 +1,131 @@
+###
+
+GET http://localhost:3000/todos
+Accept: application/json
+
+> {%
+    client.test("Response status should be 200", () => {
+        const expected = 200;
+
+        const actual = response.status;
+        client.assert(actual === expected, `Expected '${ expected }' but received '${ actual }`);
+    });
+
+    client.test("Response content-type should be 'text/plain'", () => {
+        const expected = "application/json";
+
+        const actual = response.contentType.mimeType;
+        client.assert(actual === expected, `Expected '${ expected }' but received '${ actual }'`);
+    });
+
+    client.test("Response body should contain 'Hello Elysia'", () => {
+        const expected = JSON.stringify(
+            {
+                id: 1,
+                title: "First Todo",
+                status: "unreached",
+            });
+
+        const actual = JSON.stringify(response.body[0]);
+        client.assert(actual === expected, `Expected '${ expected }' but received '${ actual }'`);
+    });
+%}
+
+###
+
+POST http://localhost:3000/todos
+Accept: text/plain
+Content-Type: application/json
+
+{
+  "title": "test Todo",
+  "status": "reached"
+}
+
+> {%
+    client.test("Response status should be 201", () => {
+        const expected = 201;
+
+        const actual = response.status;
+        client.assert(actual === expected, `Expected ${expected} but received ${actual}`);
+    });
+
+    client.test("Response content-type should be 'text/plain'", () => {
+        const expected = 'text/plain'; // 일반 응답만 올땐 text/Plain
+
+        const actual = response.contentType.mimeType;
+        client.assert(actual === expected, `Expected ${expected} but received ${actual}`);
+    });
+%}
+
+###
+
+PATCH http://localhost:3000/todos/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "update Todo",
+  "status": "reached"
+}
+
+> {%
+    client.test("Response status should be 200", () => {
+        const expected = 200;
+
+        const actual = response.status;
+        client.assert(actual === expected, `Expected ${expected} but received ${actual}`);
+    });
+
+    client.test("Response content-type should be 'application/json'", () => {
+        const expected = 'application/json';
+
+        const actual = response.contentType.mimeType;
+        client.assert(actual === expected, `Expected ${expected} but received ${actual}`);
+    });
+
+    client.test("Response body should be 'First todo", () => {
+        const expected = JSON.stringify({
+            id: "1",
+            title: "update Todo",
+            status: "reached",
+        });
+
+        const actual = JSON.stringify(response.body);
+        client.assert(actual === expected, `Expected ${expected} but received ${actual}`);
+    });
+%}
+
+###
+
+DELETE http://localhost:3000/todos/5
+Accept: application/json
+Content-Type: application/json
+
+
+> {%
+    client.test("Response status should be 200", () => {
+        const expected = 200;
+
+        const actual = response.status;
+        client.assert(actual === expected, `Expected ${expected} but received ${actual}.`)
+    });
+
+    client.test("Response content-type should be 'application/json'", () => {
+        const expected = "application/json";
+
+        const actual = response.contentType.mimeType;
+        client.assert(actual === expected, `Expected ${expected} but received ${actual}.`)
+    });
+
+    client.test("Response body should contain 'First todo", () => {
+        const expected = JSON.stringify({
+            id: 5,
+            title: "Fifth Todo",
+            status: "reached",
+        });
+
+        const actual = JSON.stringify(response.body);
+        client.assert(actual === expected, `Expected ${expected} but received ${actual}.`)
+    });
+%}
