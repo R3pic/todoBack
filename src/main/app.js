@@ -1,14 +1,10 @@
 import express from "express";
-
-// import indexRouter from "../routes/index.js";
 import todoRouter from "./todo/todo.router.js"
-
 import path from "node:path";
 import { RdbmsConfig } from "./configure/rdbms.config.js";
 
-RdbmsConfig.open();
-RdbmsConfig.initialize();
-
+await RdbmsConfig.open();
+await RdbmsConfig.initialize();
 
 const app = express();
 

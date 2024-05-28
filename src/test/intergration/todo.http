@@ -86,7 +86,7 @@ Content-Type: application/json
 
     client.test("Response body should be 'First todo", () => {
         const expected = JSON.stringify({
-            id: "1",
+            id: 1,
             title: "update Todo",
             status: "reached",
         });

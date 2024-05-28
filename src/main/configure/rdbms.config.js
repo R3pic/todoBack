@@ -2,58 +2,96 @@ import sqlite3 from "sqlite3";
 
 let rdbms;
 
-const open = () => {
-    rdbms = new sqlite3.Database(":memory:");
+const open = async () => {
+  return new Promise((resolve, reject) => {
+    rdbms = new sqlite3.Database(":memory:", (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        console.log('Connected to the in-memory SQLite database');
+        resolve();
+      }
+    });
+  });
 };
 
-const close = () => {
-    rdbms.close();
+const close = async () => {
+  return new Promise((resolve, reject) => {
+    rdbms.close((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        console.log('Database connection closed.');
+        resolve();
+      }
+    });
+  });
 };
 
-const createTable = () => {
-    console.info("Create Table");
-    return `CREATE TABLE IF NOT EXISTS todo (
+const createTable = async () => {
+  const query = `CREATE TABLE IF NOT EXISTS todo (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT,
     status TEXT)`;
+  return runQuery(query);
 };
 
-const insertDummy = () => {
-    console.info("Add dummy");
-    return `INSERT INTO todo (title, status)
-            VALUES ('First Todo', 'unreached')
-            , ('Second Todo', 'reached')
-            , ('Third Todo', 'unreached')
-            , ('Fourth Todo', 'reached')
-            , ('Fifth Todo', 'reached')`;
+const insertDummy = async () => {
+  const query = `INSERT INTO todo (title, status)
+                VALUES ('First Todo', 'unreached'),
+                       ('Second Todo', 'reached'),
+                       ('Third Todo', 'unreached'),
+                       ('Fourth Todo', 'reached'),
+                       ('Fifth Todo', 'reached')`;
+  return runQuery(query);
 };
 
-const initialize = () => {
-    runQuery(createTable());
-    runQuery(insertDummy());
-
-    const query = "SELECT * FROM todo"; //*로 전체 속성 조회
-    let data = allQuery(query);
-    console.info(data);
+const initialize = async () => {
+    await createTable();
+    await insertDummy();
 };
 
-const runQuery = (query) => {
-    return rdbms.exec(query);
+const runQuery = async (query) => {
+  return new Promise((resolve, reject) => {
+    rdbms.exec(query, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
 };
 
-const getQuery = (query) => {
-    return rdbms.get(query);
+const allQuery = async (query) => {
+  return new Promise((resolve, reject) => {
+    rdbms.all(query, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
 };
 
-const allQuery = (query) => {
-    return rdbms.all(query);
+const getQuery = async (query) => {
+  return new Promise((resolve, reject) => {
+    rdbms.get(query, (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
 };
 
 export const RdbmsConfig = {
-    initialize,
-    close,
-    open,
-    runQuery,
-    getQuery,
-    allQuery,
+  initialize,
+  close,
+  open,
+  runQuery,
+  getQuery,
+  allQuery,
 };
