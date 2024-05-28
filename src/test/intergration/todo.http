@@ -1,6 +1,6 @@
 ###
-
-GET http://localhost:3000/todos
+# @no-log
+GET http://{{HOST}}:{{PORT}}/todos
 Accept: application/json
 
 > {%
@@ -22,24 +22,33 @@ Accept: application/json
         const expected = JSON.stringify(
             {
                 id: 1,
-                title: "First Todo",
-                status: "unreached",
+                content: "First Todo",
+                isDone: false,
             });
 
         const actual = JSON.stringify(response.body[0]);
         client.assert(actual === expected, `Expected '${ expected }' but received '${ actual }'`);
     });
+
+    client.test("Setting up max id", () => {
+        client.global.set("maxId", 0);
+        response.body.forEach(todo => {
+            if (todo.id > client.global.get("maxId")) {
+                client.global.set("maxId", todo.id);
+            }
+        });
+    });
 %}
 
 ###
-
-POST http://localhost:3000/todos
+# @no-log
+POST http://{{HOST}}:{{PORT}}/todos
 Accept: text/plain
 Content-Type: application/json
 
 {
-  "title": "test Todo",
-  "status": "reached"
+  "content": "test Todo",
+  "isDone": true
 }
 
 > {%
@@ -59,8 +68,12 @@ Content-Type: application/json
 %}
 
 ###
+< {%
+    request.variables.set("reqId", client.global.get("maxId"));
+%}
 
-PATCH http://localhost:3000/todos/1
+# @no-log
+PATCH http://{{HOST}}:{{PORT}}/todos/{{reqId}}
 Accept: application/json
 Content-Type: application/json
 
@@ -86,7 +99,7 @@ Content-Type: application/json
 
     client.test("Response body should be 'First todo", () => {
         const expected = JSON.stringify({
-            id: "1",
+            id: Number(client.global.get("maxId")),
             title: "update Todo",
             status: "reached",
         });
@@ -97,8 +110,12 @@ Content-Type: application/json
 %}
 
 ###
+< {%
+    request.variables.set("reqId", client.global.get("maxId"));
+%}
 
-DELETE http://localhost:3000/todos/5
+# @no-log
+DELETE http://{{HOST}}:{{PORT}}/todos/{{reqId}}
 Accept: application/json
 Content-Type: application/json
 
@@ -120,9 +137,9 @@ Content-Type: application/json
 
     client.test("Response body should contain 'First todo", () => {
         const expected = JSON.stringify({
-            id: 5,
-            title: "Fifth Todo",
-            status: "reached",
+            id: Number(client.global.get("maxId")),
+            "title": "update Todo",
+            "status": "reached"
         });
 
         const actual = JSON.stringify(response.body);
