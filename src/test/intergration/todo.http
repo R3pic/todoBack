@@ -1,6 +1,6 @@
 ###
 # @no-log
-GET http://{{HOST}}:{{PORT}}/todos
+GET https://{{HOST}}:{{PORT}}/todos
 Accept: application/json
 
 > {%
@@ -42,12 +42,12 @@ Accept: application/json
 
 ###
 # @no-log
-POST http://{{HOST}}:{{PORT}}/todos
+POST https://{{HOST}}:{{PORT}}/todos
 Accept: text/plain
 Content-Type: application/json
 
 {
-  "content": "test Todo",
+  "content": 1,
   "isDone": true
 }
 
@@ -73,7 +73,7 @@ Content-Type: application/json
 %}
 
 # @no-log
-PATCH http://{{HOST}}:{{PORT}}/todos/{{reqId}}
+PATCH https://{{HOST}}:{{PORT}}/todos/{{reqId}}
 Accept: application/json
 Content-Type: application/json
 
@@ -115,7 +115,7 @@ Content-Type: application/json
 %}
 
 # @no-log
-DELETE http://{{HOST}}:{{PORT}}/todos/{{reqId}}
+DELETE https://{{HOST}}:{{PORT}}/todos/{{reqId}}
 Accept: application/json
 Content-Type: application/json
 

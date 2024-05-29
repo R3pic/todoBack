@@ -1,15 +1,13 @@
 
 const validate_TodoDto = (TodoDto) => {
     console.info("Try Validate : ", TodoDto);
-    if (typeof TodoDto.content !== 'string'){
-        throw new Error("content must be a string");
-    }
-    if (typeof TodoDto.isDone !== 'boolean') {
-        throw new Error("isDone must be a boolean");
-    }
-
-    if (typeof TodoDto.createdDate !== 'number'){
-        throw new Error("createDate must be a number");
+    if (typeof TodoDto.content !== 'string' ||
+        typeof TodoDto.isDone !== 'boolean' ||
+        typeof TodoDto.createdDate !== 'number'
+    ){
+        const error = new Error()
+        error.code = "VALIDATION"
+        throw error;
     }
 
     return true
@@ -23,7 +21,7 @@ const TodoDtoValidator = (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(400).send();
+        next(error);
     }
 }
 
