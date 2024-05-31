@@ -19,11 +19,6 @@ const close = () => {
 };
 
 const createTable = () => {
-    // return `CREATE TABLE IF NOT EXISTS todo (
-    // id INTEGER PRIMARY KEY AUTOINCREMENT,
-    // title TEXT,
-    // status TEXT)`;
-    // 타임 스탬프 있는 버전
     return `CREATE TABLE IF NOT EXISTS todo (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT,
@@ -50,16 +45,6 @@ const runQuery = (query) => {
 };
 
 const getQuery = async (query) => {
-    // return new Promise((resolve, reject) => {
-    //     rdbms.get(query, (err, row) => {
-    //         if (err) {
-    //             reject(err);
-    //         }
-    //         else{
-    //             resolve(row);
-    //         }
-    //     });
-    // });
     try {
         return await rdbmsGet(query);
     } catch (err){
@@ -68,17 +53,6 @@ const getQuery = async (query) => {
 };
 
 const allQuery = async (query) => {
-    // legacy-code
-    // return new Promise((resolve, reject) => {
-    //     rdbms.all(query, (err, rows) => {
-    //         if (err) {
-    //             reject(err);
-    //         }
-    //         else {
-    //             resolve(rows);
-    //         }
-    //     });
-    // });
     try {
         return await rdbmsAll(query);
     } catch (err) {

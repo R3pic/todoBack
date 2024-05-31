@@ -1,7 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import dotenv from "dotenv";
-dotenv.config();
 
 const cors_option = {
     origin: process.env.CORS_OPTION

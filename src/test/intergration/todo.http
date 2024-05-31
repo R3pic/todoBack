@@ -47,8 +47,9 @@ Accept: text/plain
 Content-Type: application/json
 
 {
-  "content": 1,
-  "isDone": true
+  "content": "Test",
+  "isDone": 3,
+  "createdDate": 1234
 }
 
 > {%

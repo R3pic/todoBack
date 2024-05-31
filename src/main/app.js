@@ -1,12 +1,14 @@
+import 'dotenv/config.js';
 import path from "node:path";
 import express from "express";
 import cors from "cors";
 import https from "https";
+import createHttpError from "http-errors";
 
 import todoRouter from "./todo/todo.router.js"
 import { RdbmsConfig } from "./configure/rdbms.config.js";
 import { ExpressOption } from "./configure/express.config.js";
-import { findErrorCode, findErrorMessage } from "./common/error.message.js";
+import { ErrorHandler } from "./common/errorHandler.js";
 
 RdbmsConfig.open();
 RdbmsConfig.initialize();
@@ -19,16 +21,10 @@ const app = express()
     .use(express.urlencoded({ extended: true }))
     .use("/todos", todoRouter)
     .use((req, res, next) => {
-        const message = findErrorMessage("NOT_FOUND");
-        res.status(404).json({ error: message });
-        next()
+        console.log("404 Not Found 미들웨어");
+        next(createHttpError(404, `Router ${req.url} Not Found\n`));
     })
-    .use((err, req, res, next) => {
-        console.log(err);
-        const code = err.code || "UNKNOWN";
-        const message = findErrorMessage(code);
-        res.status(findErrorCode(err)).json({ error: message });
-    });
+    .use(ErrorHandler);
 
 https.createServer(ExpressOption.ssl_option, app).listen(ExpressOption.ssl_option.port, () => {
     console.log(`HTTPS server started on port ${ExpressOption.ssl_option.port}`);

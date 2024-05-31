@@ -14,7 +14,6 @@ const findAll = async () => {
 
 
 const add = async (todo) => {
-    //RETURNING *로 행이 아닌 속성을 반환할 것을 지정.
     const query = `INSERT INTO todo (content, isDone, createdDate) VALUES ('${todo.content}', '${todo.isDone === true ? 1 : 0}', '${todo.createdDate}') RETURNING *`;
     return await RdbmsConfig.getQuery(query);
 };
@@ -26,7 +25,7 @@ const update = async (id, todo) => {
 };
 
 const remove = async (id) => {
-    const query = `DELETE FROM todo WHERE id = ${id} RETURNING *`; //그냥 지울 거니까 속성값 필요 없음
+    const query = `DELETE FROM todo WHERE id = ${id} RETURNING *`;
     return await RdbmsConfig.getQuery(query);
 };
 

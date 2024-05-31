@@ -1,30 +1,11 @@
+import { body } from "express-validator";
 
-const validate_TodoDto = (TodoDto) => {
-    console.info("Try Validate : ", TodoDto);
-    if (typeof TodoDto.content !== 'string' ||
-        typeof TodoDto.isDone !== 'boolean' ||
-        typeof TodoDto.createdDate !== 'number'
-    ){
-        const error = new Error()
-        error.code = "VALIDATION"
-        throw error;
-    }
-
-    return true
-}
-
-
-const TodoDtoValidator = (req, res, next) => {
-    try {
-        validate_TodoDto(req.body);
-        next();
-    }
-    catch (error) {
-        console.error(error);
-        next(error);
-    }
-}
-
-export const TodoValidator = {
-    TodoDtoValidator,
-}
+export const TodoValidator = [
+    body('content')
+        .isString().withMessage("content should be String")
+        .isLength({min: 1}).withMessage("content must be at least 1 character"),
+    body('createdDate')
+        .isInt().withMessage("createdDate must be Int"),
+    body('isDone')
+        .isBoolean().withMessage("isDone must be Boolean"),
+];
