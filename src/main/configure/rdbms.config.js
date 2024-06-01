@@ -8,8 +8,6 @@ let rdbmsAll;
 
 const open = () => {
     rdbms = new sqlite3.Database(":memory:");
-    // rdbms = new sqlite3.Database("db.db");
-    // sqlite3의 Callback 형식을 Promise형식으로 바꾸어주는 Wrapper를 사용함
     rdbmsGet = promisify(rdbms.get).bind(rdbms);
     rdbmsAll = promisify(rdbms.all).bind(rdbms);
 };

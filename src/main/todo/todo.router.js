@@ -1,5 +1,5 @@
 import express from "express";
-import {body, validationResult} from 'express-validator';
+import { validationResult } from 'express-validator';
 
 import {TodoHandlerRdbms as TodoHandler } from "./todo.handler.rdbms.js";
 import createHttpError from "http-errors";
