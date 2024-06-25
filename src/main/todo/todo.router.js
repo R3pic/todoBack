@@ -1,7 +1,7 @@
 import express from "express";
 import { validationResult } from 'express-validator';
 
-import {TodoHandlerRdbms as TodoHandler } from "./todo.handler.rdbms.js";
+import {TodoHandlerMysql as TodoHandler } from "./todo.handler.mysql.js";
 import {TodoValidator} from "./todo.validator.js";
 import {errorCheck} from "../common/validationCheck.js";
 
@@ -15,7 +15,7 @@ router
     .post('/', TodoValidator, async (req, res, next) => {
         const errors = validationResult(req);
         errorCheck(errors, next);
-
+        console.log("Post : 들어온 객체", req.body);
         const newTodo = await TodoHandler.add(req.body);
         res.status(200).send(newTodo);
     })
