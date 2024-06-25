@@ -35,7 +35,7 @@ const insertDummy = () => {
 
 const initialize = () => {
     runQuery(createTable());
-    // runQuery(insertDummy());
+    runQuery(insertDummy());
 };
 
 const runQuery = (query) => {
