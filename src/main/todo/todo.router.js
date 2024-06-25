@@ -15,23 +15,20 @@ router
     .post('/', TodoValidator, async (req, res, next) => {
         const errors = validationResult(req);
         errorCheck(errors, next);
-        console.log("Post : 들어온 객체", req.body);
-        const newTodo = await TodoHandler.add(req.body);
-        res.status(200).send(newTodo);
+        const newData = await TodoHandler.add(req.body);
+        res.status(200).send(newData);
     })
     .delete('/:id', async (req, res) => {
         const id = Number(req.params.id);
         const removeData = await TodoHandler.remove(id);
-        console.info("삭제 요청", id, removeData);
         res.send(removeData);
     })
     .patch('/:id', TodoValidator, async (req, res, next) => {
         const errors = validationResult(req);
         errorCheck(errors, next);
-
         const id = Number(req.params.id);
-        const data = await TodoHandler.update(id, req.body);
-        res.send(data);
+        const updatedData = await TodoHandler.update(id, req.body);
+        res.send(updatedData);
     });
 
 export default router;
