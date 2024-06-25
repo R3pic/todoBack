@@ -1,5 +1,9 @@
+import expresspkg from 'express';
+const { NextFunction } = expresspkg;
+
 import createHttpError from "http-errors";
-import { Result, AlternativeValidationError, GroupedAlternativeValidationError, UnknownFieldsError, FieldValidationError } from 'express-validator';
+import pkg from 'express-validator';
+const { Result, AlternativeValidationError, GroupedAlternativeValidationError, UnknownFieldsError, FieldValidationError } = pkg;
 
 /**
  *
