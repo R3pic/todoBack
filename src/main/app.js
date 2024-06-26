@@ -4,12 +4,12 @@ import cors from "cors";
 import https from "https";
 
 import todoRouter from "./todo/todo.router.js"
-import { MysqlConfig} from "./configure/mysql.config.js";
+import { MysqlConfig as RdbmsConfig } from "./configure/mysql.config.js";
 import { ExpressOption } from "./configure/express.config.js";
 import { ErrorHandler } from "./common/errorHandler.js";
 
-MysqlConfig.open();
-MysqlConfig.initialize();
+RdbmsConfig.open();
+RdbmsConfig.initialize();
 
 const app = express()
     .set('Host', process.env.HOST || 'localhost')

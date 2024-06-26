@@ -8,11 +8,14 @@ const findAll = async () => {
         row.isDone = Boolean(row.isDone);
         todos.push(row);
     });
-
     return todos;
 };
 
 const add = async (todo) => {
+    console.log("요청온 투두",todo);
+    // https://www.geeksforgeeks.org/how-to-convert-javascript-datetime-to-mysql-datetime/
+    // const createdDate = new Date(todo.createdDate).toISOString().slice(0, 19).replace('T', ' '); // 프론트에서 DateTime 생성
+    // const query = `INSERT INTO todo (content, isDone, createdDate) VALUES ('${todo.content}', '${todo.isDone === true ? 1 : 0}', '${createdDate}')`;
     const query = `INSERT INTO todo (content, isDone) VALUES ('${todo.content}', '${todo.isDone === true ? 1 : 0}')`;
     const { insertId } = await MysqlConfig.runQuery(query);
     const selQuery = `SELECT * FROM todo WHERE id = ${insertId}`;
